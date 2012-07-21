@@ -15,7 +15,7 @@ import eloquent.eliza.core.Eliza;
 import eloquent.eliza.facebook.Comment;
 import eloquent.eliza.facebook.Post;
 import eloquent.eliza.facebook.User;
-import eloquent.eliza.rest.Facebook;
+import eloquent.eliza.rest.FacebookHandler;
 
 public class Processor implements Runnable {
 
@@ -24,7 +24,7 @@ public class Processor implements Runnable {
 	 */
 	private Logger logger = Logger.getLogger(getClass());
 
-	public Processor(Facebook facebook){
+	public Processor(FacebookHandler facebook){
 		try{
 			ClassPathResource resource = new ClassPathResource("ProcessedPosts.txt");
 			file = resource.getFile(); 
@@ -38,7 +38,7 @@ public class Processor implements Runnable {
 	/**
 	 * facebook object
 	 */
-	private Facebook facebook;
+	private FacebookHandler facebook;
 	/**
 	 * File to write the processed entities
 	 */
@@ -153,4 +153,13 @@ public class Processor implements Runnable {
 		return list;
 	}
 
+	public static void main(String str[]){
+		String userName = "eloquent.eliza";
+		String accessToken = "AAACuzRr6cdUBAHC8qtVYRxkMyqrTc7i833U8HWPnkrhjjm1WZCEkKByyDlH1IuQXyiiD9tfxS6PUIjGkZAnTppCLIiWqfE9WFUKbZC4QgZDZD";
+		FacebookHandler facebook = new FacebookHandler(userName, accessToken);
+
+		Processor processor = new Processor(facebook);
+		processor.setEliza(new Eliza());
+		processor.run();
+	}
 }

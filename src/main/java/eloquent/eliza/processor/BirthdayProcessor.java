@@ -8,21 +8,21 @@ import org.apache.log4j.Logger;
 
 import eloquent.eliza.facebook.Post;
 import eloquent.eliza.facebook.User;
-import eloquent.eliza.rest.Facebook;
+import eloquent.eliza.rest.FacebookHandler;
 
 public class BirthdayProcessor implements Runnable {
 
 	/**
 	 * Facebook to process birthday events
 	 */
-	private Facebook facebook;
+	private FacebookHandler facebook;
 	
 	/**
 	 * Logger for logging
 	 */
 	private Logger logger = Logger.getLogger(getClass());
 
-	public BirthdayProcessor(Facebook facebook){
+	public BirthdayProcessor(FacebookHandler facebook){
 		this.facebook = facebook;
 	}
 
@@ -62,4 +62,12 @@ public class BirthdayProcessor implements Runnable {
 		//logger.info("Finished Processing birthday events");
 	}
 
+	public static void main(String[] args){
+		String userName = "eloquent.eliza";
+		String accessToken = "AAACuzRr6cdUBAHC8qtVYRxkMyqrTc7i833U8HWPnkrhjjm1WZCEkKByyDlH1IuQXyiiD9tfxS6PUIjGkZAnTppCLIiWqfE9WFUKbZC4QgZDZD";
+		FacebookHandler facebook = new FacebookHandler(userName, accessToken);
+
+		BirthdayProcessor birthdayProcessor = new BirthdayProcessor(facebook);
+		birthdayProcessor.run();
+	}
 }

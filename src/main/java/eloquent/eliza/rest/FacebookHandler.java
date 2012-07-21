@@ -21,7 +21,7 @@ import eloquent.eliza.facebook.User;
  * @author shantanu
  */
 
-public class Facebook {
+public class FacebookHandler {
 	
 	/**
 	 * Access token with appropriate permissions
@@ -48,7 +48,7 @@ public class Facebook {
 	 * restOperations object and registers the 
 	 * Convertors
 	 */
-	private Facebook(){
+	private FacebookHandler(){
 		restOperations = new RestTemplate();
 		List<HttpMessageConverter<?>> convertors = new ArrayList<HttpMessageConverter<?>>();
 		convertors.add(new CommentsConvertor());
@@ -67,14 +67,14 @@ public class Facebook {
 	 * @param accessToken
 	 * 				access token with the desired permissions
 	 */
-	public Facebook(String userId, String accessToken){
+	public FacebookHandler(String userId, String accessToken){
 		this();
 		this.accessToken = accessToken;
 		this.userId = userId;
 	}
 	
 	/**
-	 * @return {@link Facebook#userId}
+	 * @return {@link FacebookHandler#userId}
 	 */
 	public String getUserId() {
 		return userId;
@@ -179,25 +179,4 @@ public class Facebook {
 		return friends;
 	}
 	
-	// Test driver. to be removed later
-	public static void main(String str[]){
-		String accessToken = "AAACuzRr6cdUBAHC8qtVYRxkMyqrTc7i833U8HWPnkrhjjm1WZCEkKByyDlH1IuQXyiiD9tfxS6PUIjGkZAnTppCLIiWqfE9WFUKbZC4QgZDZD";
-		Facebook facebook = new Facebook("eloquent.eliza", accessToken);
-//		Collection<Post> feed = facebook.getFeed();
-//		for(Post post: feed){
-//			System.out.println(facebook.getComments(post));
-//		}
-		Collection<User> friends =	facebook.getFriendList();
-		for(User friend: friends){
-		//	System.out.println(String.format("%s - %s", friend.getId(),friend.getName()));
-			User user = facebook.getObject(friend.getId(), User.class);
-			System.out.println(user.getName() + " - " +user.getBirthday());
-		}
-//		User shantanu = facebook.getObject("713670047", User.class);
-//		User eliza = facebook.getObject("eloquent.eliza", User.class);
-//		Post post = new Post();
-//		post.setFrom(eliza);
-//		post.setMessage("Test message");
-//		facebook.postOnWall(post, shantanu);
-	}
 }
