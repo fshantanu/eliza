@@ -178,5 +178,17 @@ public class FacebookHandler {
 				accessToken);
 		return friends;
 	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public void setRestOperations(RestTemplate restOperations) {
+		this.restOperations = restOperations;
+	}
 	
 }

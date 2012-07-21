@@ -59,15 +59,7 @@ public class BirthdayProcessor implements Runnable {
 			}
 		}
 
-		//logger.info("Finished Processing birthday events");
+		logger.info("Finished Processing birthday events");
 	}
 
-	public static void main(String[] args){
-		String userName = "eloquent.eliza";
-		String accessToken = "AAACuzRr6cdUBAHC8qtVYRxkMyqrTc7i833U8HWPnkrhjjm1WZCEkKByyDlH1IuQXyiiD9tfxS6PUIjGkZAnTppCLIiWqfE9WFUKbZC4QgZDZD";
-		FacebookHandler facebook = new FacebookHandler(userName, accessToken);
-
-		BirthdayProcessor birthdayProcessor = new BirthdayProcessor(facebook);
-		birthdayProcessor.run();
-	}
 }

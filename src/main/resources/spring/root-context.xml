@@ -11,9 +11,10 @@
   <!-- Properties file -->
   <context:property-placeholder location="classpath:processor.properties" />
   
-  <!-- Initialize the facebook bean -->  
+  <!-- Initialize the facebook handler bean -->  
   <bean id="facebook" class="eloquent.eliza.rest.FacebookHandler"
-   		p:username="${eloquent.eliza.processor.user.accessToken}"
+  		
+   		p:userId="${eloquent.eliza.processor.user.accessToken}"
    		p:accessToken="${eloquent.eliza.processor.user.userName}" /> 
 
 </beans>
