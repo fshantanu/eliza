@@ -9,7 +9,7 @@ import org.springframework.core.io.ClassPathResource;
  *  Stores the processed script.
  *  Does the input transformations.
  */
-public class ElizaMain {
+public class Eliza {
 
 	final boolean echoInput = false;
 	final boolean printData = false;
@@ -305,7 +305,7 @@ public class ElizaMain {
 
 	// Test driver. Remove later.
 	public static void main(String str[]){
-		ElizaMain eliza = new ElizaMain();
+		Eliza eliza = new Eliza();
 		String reply = eliza.getReply("yesterday i dreamed of making you jelous");
 		System.out.println(reply);
 	}

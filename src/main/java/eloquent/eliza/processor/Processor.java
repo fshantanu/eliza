@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 
-import eloquent.eliza.core.ElizaMain;
+import eloquent.eliza.core.Eliza;
 import eloquent.eliza.facebook.Comment;
 import eloquent.eliza.facebook.Post;
 import eloquent.eliza.facebook.User;
@@ -47,9 +47,9 @@ public class Processor implements Runnable {
 	/**
 	 * Eliza to generate replies for the post
 	 */
-	private ElizaMain eliza;
+	private Eliza eliza;
 
-	public void setEliza(ElizaMain eliza) {
+	public void setEliza(Eliza eliza) {
 		this.eliza = eliza;
 	}
 
@@ -159,7 +159,7 @@ public class Processor implements Runnable {
 		Facebook facebook = new Facebook(userName, accessToken);
 
 		Processor processor = new Processor(facebook);
-		processor.setEliza(new ElizaMain());
+		processor.setEliza(new Eliza());
 		processor.run();
 	}
 }
