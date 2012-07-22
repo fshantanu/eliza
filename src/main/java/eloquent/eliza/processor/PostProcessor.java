@@ -17,18 +17,17 @@ import eloquent.eliza.facebook.Post;
 import eloquent.eliza.facebook.User;
 import eloquent.eliza.rest.FacebookHandler;
 
-public class Processor implements Runnable {
+public class PostProcessor implements Runnable {
 
 	/**
 	 * logger for logging 
 	 */
 	private Logger logger = Logger.getLogger(getClass());
 
-	public Processor(FacebookHandler facebook){
+	public PostProcessor(){
 		try{
 			ClassPathResource resource = new ClassPathResource("ProcessedPosts.txt");
 			file = resource.getFile(); 
-			this.facebook = facebook;
 		}
 		catch(Throwable ex){
 			throw new RuntimeException(ex);
@@ -38,7 +37,7 @@ public class Processor implements Runnable {
 	/**
 	 * facebook object
 	 */
-	private FacebookHandler facebook;
+	private FacebookHandler facebookHandler;
 	/**
 	 * File to write the processed entities
 	 */
@@ -48,10 +47,6 @@ public class Processor implements Runnable {
 	 * Eliza to generate replies for the post
 	 */
 	private Eliza eliza;
-
-	public void setEliza(Eliza eliza) {
-		this.eliza = eliza;
-	}
 
 	@Override
 	public void run() {
@@ -66,7 +61,7 @@ public class Processor implements Runnable {
 		List<String> newEntities = new ArrayList<String>();
 
 		// Read feed from the user's wall
-		Collection<Post> feed = facebook.getFeed();
+		Collection<Post> feed = facebookHandler.getFeed();
 		for(Post post: feed){
 
 			try{
@@ -74,12 +69,12 @@ public class Processor implements Runnable {
 				String postReply = processEntity(post.getId(), 
 						post.getMessage(), post.getFrom(), processedEntities);
 				if(postReply!=null){
-					facebook.commentOnPost(createComment(post, postReply));
+					facebookHandler.commentOnPost(createComment(post, postReply));
 					newEntities.add(post.getId());
 				}
 
 				// Get a list of comments for the post
-				Collection<Comment> comments = facebook.getComments(post);
+				Collection<Comment> comments = facebookHandler.getComments(post);
 				for(Comment comment: comments){
 					// process the message in the comment
 					String commentReply = processEntity(comment.getId(), 
@@ -87,7 +82,7 @@ public class Processor implements Runnable {
 					if(commentReply!=null){
 						String personalisedReply =  
 								String.format("@%s: %s", comment.getFrom().getName(), commentReply); 
-						facebook.commentOnPost(createComment(post, personalisedReply));
+						facebookHandler.commentOnPost(createComment(post, personalisedReply));
 						newEntities.add(comment.getId());
 					}
 				}
@@ -151,6 +146,23 @@ public class Processor implements Runnable {
 			throw new RuntimeException(e);
 		}
 		return list;
+	}
+	
+	/**
+	 * Set Eliza
+	 * @param eliza
+	 */
+	public void setEliza(Eliza eliza) {
+		this.eliza = eliza;
+	}
+
+
+	/**
+	 * Facebook handler
+	 * @param facebookHandler
+	 */
+	public void setFacebookHandler(FacebookHandler facebookHandler) {
+		this.facebookHandler = facebookHandler;
 	}
 
 }

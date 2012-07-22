@@ -11,10 +11,50 @@
   <!-- Properties file -->
   <context:property-placeholder location="classpath:processor.properties" />
   
-  <!-- Initialize the facebook handler bean -->  
   <bean id="facebook" class="eloquent.eliza.rest.FacebookHandler"
-  		
-   		p:userId="${eloquent.eliza.processor.user.accessToken}"
-   		p:accessToken="${eloquent.eliza.processor.user.userName}" /> 
-
+  	p:restOperations-ref="restTemplate"
+ 	p:userId="${eloquent.eliza.processor.user.userName}"
+   	p:accessToken="${eloquent.eliza.processor.user.accessToken}" /> 
+   		
+  <bean id="restTemplate" 
+  	class="org.springframework.web.client.RestTemplate">
+  	<property name="messageConverters">
+  		<list>
+  		<bean class="eloquent.eliza.rest.CommentsConvertor"/>
+		<bean class="eloquent.eliza.rest.CommentConverter"/>
+		<bean class="eloquent.eliza.rest.FeedConverter"/>
+		<bean class="eloquent.eliza.rest.PostConverter"/>
+		<bean class="eloquent.eliza.rest.UserConverter"/>
+		<bean class="eloquent.eliza.rest.FriendListConverter"/>
+  		</list>
+  	</property>
+  </bean> 
+  
+  <bean id="eliza" class="eloquent.eliza.core.Eliza"/>
+  
+  <bean id="postProcessor" class="eloquent.eliza.processor.PostProcessor"
+  	p:facebookHandler-ref="facebook"
+  	p:eliza-ref="eliza" />
+  	
+  <bean id="birthdayProcessor" class="eloquent.eliza.processor.BirthdayProcessor"
+  	p:facebookHandler-ref="facebook" />
+  
+  <bean id="scheuledRegisterar" 
+  	class="org.springframework.scheduling.config.ScheduledTaskRegistrar">
+  	<property name="taskScheduler">
+  		<bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler"
+  			p:poolSize="2" 
+  			p:threadNamePrefix="eliza-processor-"
+  			p:waitForTasksToCompleteOnShutdown="true"/>
+  	</property>
+  	<!-- process posts every 5 minutes -->
+  	<property name="fixedDelayTasks">
+  		<map><entry key-ref="postProcessor" value="300000"></entry></map>
+  	</property>
+  	<!-- process birthdays at midnight -->
+  	<property name="cronTasks">
+  		<map><entry key-ref="birthdayProcessor" value="0 0 0 * * *"></entry></map>
+  	</property>
+  </bean>	
+  
 </beans>

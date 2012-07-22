@@ -15,16 +15,13 @@ public class BirthdayProcessor implements Runnable {
 	/**
 	 * Facebook to process birthday events
 	 */
-	private FacebookHandler facebook;
+	private FacebookHandler facebookHandler;
 	
 	/**
 	 * Logger for logging
 	 */
 	private Logger logger = Logger.getLogger(getClass());
 
-	public BirthdayProcessor(FacebookHandler facebook){
-		this.facebook = facebook;
-	}
 
 	@Override
 	public void run() {
@@ -34,14 +31,14 @@ public class BirthdayProcessor implements Runnable {
 		logger.info("Processing Birthday events for - " + today);
 
 		// Get the user object for the logged in user
-		User me = facebook.getObject(facebook.getUserId(), User.class);
+		User me = facebookHandler.getObject(facebookHandler.getUserId(), User.class);
 		// get a list of friends for the user. 
-		Collection<User> friends = facebook.getFriendList();
+		Collection<User> friends = facebookHandler.getFriendList();
 
 		// for each user check if his birthday today.
 		// if so wish the user Happy Birthday!
 		for(User friend: friends){
-			User user = facebook.getObject(friend.getId(), User.class);
+			User user = facebookHandler.getObject(friend.getId(), User.class);
 			if(user.getBirthday()!=null && 
 					formatter.format(user.getBirthday()).equals(today)){
 
@@ -50,7 +47,7 @@ public class BirthdayProcessor implements Runnable {
 					Post post = new Post();
 					post.setFrom(me);
 					post.setMessage(String.format("Happy Birthday %s !", user.getFirstName()));
-					facebook.postOnWall(post, user);
+					facebookHandler.postOnWall(post, user);
 				}
 				catch(Throwable ex){
 					logger.error(String.format("Error processing birthday event " +
@@ -60,6 +57,11 @@ public class BirthdayProcessor implements Runnable {
 		}
 
 		logger.info("Finished Processing birthday events");
+	}
+
+
+	public void setFacebookHandler(FacebookHandler facebookHandler) {
+		this.facebookHandler = facebookHandler;
 	}
 
 }
