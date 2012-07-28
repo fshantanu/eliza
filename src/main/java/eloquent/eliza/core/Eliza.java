@@ -280,7 +280,8 @@ public class Eliza {
 	private void readScript(String script) {
 		try {
 			ClassPathResource resource = new ClassPathResource(script);
-			BufferedReader reader = new BufferedReader(new FileReader(resource.getFile()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					resource.getInputStream()));
 			String line = null;
 			while ((line = reader.readLine())!=null) {
 				if (echoInput) 
@@ -301,12 +302,5 @@ public class Eliza {
 		}
 		String reply = processInput(message);
 		return reply;
-	}
-
-	// Test driver. Remove later.
-	public static void main(String str[]){
-		Eliza eliza = new Eliza();
-		String reply = eliza.getReply("yesterday i dreamed of making you jelous");
-		System.out.println(reply);
 	}
 }
