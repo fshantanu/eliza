@@ -35,7 +35,7 @@ public class ElizaDaemon {
         try {
           log.info("Eliza Daemon shutdown started.");
           appContext.close();
-          log.info("Search Daemon shutdown complete.");
+          log.info("Eliza Daemon shutdown complete.");
         }
         catch (Throwable ex) {
           log.warn("Could not shutdown cleanly. Continuing exit process.", ex);
