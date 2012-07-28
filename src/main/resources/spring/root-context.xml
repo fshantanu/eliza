@@ -3,18 +3,18 @@
   xmlns="http://www.springframework.org/schema/beans" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns:context="http://www.springframework.org/schema/context" 
-  xmlns:p="http://www.springframework.org/schema/p" 
   xsi:schemaLocation=" 
-      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
-      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"> 
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"> 
  
   <!-- Properties file -->
   <context:property-placeholder location="classpath:processor.properties" />
   
-  <bean id="facebook" class="eloquent.eliza.rest.FacebookHandler"
-  	p:restOperations-ref="restTemplate"
- 	p:userId="${eloquent.eliza.processor.user.userName}"
-   	p:accessToken="${eloquent.eliza.processor.user.accessToken}" /> 
+  <bean id="facebook" class="eloquent.eliza.rest.FacebookHandler">
+  	<property name="restOperations" ref="restTemplate"/>
+  	<property name="userId" value="${eloquent.eliza.processor.user.userName}"/>
+  	<property name="accessToken" value="${eloquent.eliza.processor.user.accessToken}" />
+  </bean>
    		
   <bean id="restTemplate" 
   	class="org.springframework.web.client.RestTemplate">
@@ -31,21 +31,27 @@
   </bean> 
   
   <bean id="eliza" class="eloquent.eliza.core.Eliza"/>
+  <bean id="processedPostDao" class="eloquent.eliza.db.ProcessedPostDao"/>
   
-  <bean id="postProcessor" class="eloquent.eliza.processor.PostProcessor"
-  	p:facebookHandler-ref="facebook"
-  	p:eliza-ref="eliza" />
+  <bean id="postProcessor" class="eloquent.eliza.processor.PostProcessor">
+  	<property name="facebookHandler" ref="facebook"/>
+  	<property name="eliza" ref="eliza"/>
+  	<property name="processedPostDao" ref="processedPostDao"/>
+  </bean>
   	
-  <bean id="birthdayProcessor" class="eloquent.eliza.processor.BirthdayProcessor"
-  	p:facebookHandler-ref="facebook" />
+  	
+  <bean id="birthdayProcessor" class="eloquent.eliza.processor.BirthdayProcessor">
+  <property name="facebookHandler" ref="facebook"></property>
+  </bean>
   
   <bean id="scheuledRegisterar" 
   	class="org.springframework.scheduling.config.ScheduledTaskRegistrar">
   	<property name="taskScheduler">
-  		<bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler"
-  			p:poolSize="2" 
-  			p:threadNamePrefix="eliza-processor-"
-  			p:waitForTasksToCompleteOnShutdown="true"/>
+  		<bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+  			<property name="poolSize" value="2"/>
+  			<property name="threadNamePrefix" value="eliza-processor-"/>
+  			<property name="waitForTasksToCompleteOnShutdown" value="true"/>
+  		</bean>
   	</property>
   	<!-- process posts every 5 minutes -->
   	<property name="fixedDelayTasks">
