@@ -13,7 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+    <org.springframework.version>3.1.1.RELEASE</org.springframework.version>
   </properties>
 
   <dependencies>
@@ -31,6 +31,12 @@
 	
 	<dependency>
 	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-context-support</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-web</artifactId>
 	  <version>${org.springframework.version}</version>
 	</dependency>
@@ -42,6 +48,13 @@
       <version>2.2.2</version>
     </dependency>
     
+	<dependency>
+	  <groupId>org.mongodb</groupId>
+	  <artifactId>mongo-java-driver</artifactId>
+	  <version>2.8.0</version>
+	</dependency>
+    
+    <!-- Log4j for logging -->
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -69,6 +82,18 @@
       <scope>test</scope>
     </dependency>
     
-    
   </dependencies>
+  
+  <!-- Assembly descriptor for packaging the project with all its dependencies -->
+  <build>
+    <plugins>
+    	<plugin>
+    		<artifactId>maven-assembly-plugin</artifactId>
+    		<configuration>
+    			<descriptor>src/main/assembly/assembly.xml</descriptor>
+    		</configuration>
+    	</plugin>
+    </plugins>
+   </build>
+
 </project>
