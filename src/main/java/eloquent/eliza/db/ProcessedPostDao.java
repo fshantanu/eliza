@@ -10,7 +10,7 @@ import com.mongodb.WriteConcern;
 
 public class ProcessedPostDao {
 	
-	private static final String DB_IP="192.168.1.8";
+	private static final String DB_IP="192.168.0.9";
 	private static final String DB_NAME = "eliza";
 	private static final String COLLECTION_NAME="processed_posts";
 	
