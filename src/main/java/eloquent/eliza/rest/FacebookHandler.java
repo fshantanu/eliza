@@ -102,7 +102,7 @@ public class FacebookHandler {
 	 */
 	public Collection<Comment> getComments(Post post) {
 
-		String url = apiEndpoint + "{postId}/comments&access_token={accessToken}";
+		String url = apiEndpoint + "{postId}/comments?access_token={accessToken}";
 		Collection<Comment> comments = restOperations.getForObject(url,
 				Comments.class, post.getId(), accessToken);
 
